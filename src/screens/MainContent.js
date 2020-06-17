@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import Navigation from '../components/navigation';
 import { useSelector } from 'react-redux';
 import Grid from '@material-ui/core/Grid';
@@ -9,6 +9,7 @@ import Icg from '../components/inv/icg/icgSearchPG';
 import Ic from '../components/inv/ic/icSearchPG';
 import Isc from '../components/inv/isc/iscSearchPG';
 import Item from '../components/inv/item/itemSearchPG';
+import OpeningBalSearchPG from '../components/inv/ob/OpeningBalSearchPG';
 import Application from '../components/sem/Application/ApplicationSearch';
 import Users from '../components/sem/Users/UsersSearch';
 import Roles from '../components/sem/Roles/RolesSearch';
@@ -18,110 +19,107 @@ import RolesForms from '../components/sem/Roles_Forms/RolesFormsSearch';
 import PurchaseOrder from '../components/pms/PurchaseOrders/POSearch';
 import Supplier from '../components/pms/supplier/supplierSearchPG';
 import PurReceived from '../components/pms/purchaseReecived/purRecSearchPG';
-import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import InvReport from '../components/inv/reports/InvReport';
+import PmsReport from '../components/pms/report/PmsReport';
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect
+} from 'react-router-dom';
 import secondLandingPG from '../components/misc/secondLandingPG';
 
 //import Icgt from '../components/inv/icgt';
 
-
-
 //Sample List for Demonstration, later will be fetched from redux store
 
-const formSelector = (form_name) => {
+const formSelector = form_name => {
+  switch (form_name) {
+    /* *********** Security Module *********** */
+    case 'Application':
+      return <Application />;
 
+    case 'Users':
+      return <Users />;
 
-    switch (form_name) {
+    case 'Roles':
+      return <Roles />;
 
-        /* *********** Security Module *********** */
-        case 'Application':
-            return <Application />
+    case 'User Roles':
+      return <UserRoles />;
 
-        case 'Users':
-            return <Users />
+    case 'Roles Modules':
+      return <RolesModules />;
 
-        case 'Roles':
-            return <Roles />
+    case 'Roles Forms':
+      return <RolesForms />;
 
-        case 'User Roles':
-            return <UserRoles />
+    /* *********** Inventory Module *********** */
+    case 'Unit of Measurement':
+      return <UOM />;
 
-        case 'Roles Modules':
-            return <RolesModules />
+    case 'Item Category Group Type':
+      return <Icgt />;
 
-        case 'Roles Forms':
-            return <RolesForms />
+    case 'Item Category Group':
+      return <Icg />;
 
+    case 'Item Category':
+      return <Ic />;
 
-        /* *********** Inventory Module *********** */
-        case 'Unit of Measurement':
-            return <UOM />
+    case 'Item Sub Category':
+      return <Isc />;
 
-        case 'Item Category Group Type':
-            return <Icgt />
+    case 'Item':
+      return <Item />;
 
-        case 'Item Category Group':
-            return <Icg />
+    case 'SCM Reports':
+      return <InvReport />;
 
-        case 'Item Category':
-            return <Ic />
+    case 'Opening Balance':
+      return <OpeningBalSearchPG />;
 
-        case 'Item Sub Category':
-            return <Isc />
+    /* *********** Purchase Module *********** */
+    case 'Purchase Order':
+      return <PurchaseOrder />;
 
-        case 'Item':
-            return <Item />
+    case 'Supplier':
+      return <Supplier />;
 
-     /* *********** Purchase Module *********** */
-     case 'Purchase Order':
-        return <PurchaseOrder />
+    case 'Purchase Received':
+      return <PurReceived />;
 
+    case 'SecondLandingPG':
+      return <SecondLandingPG />;
 
-      case 'Supplier':
-            return <Supplier />
+    case 'PMS Reports':
+      return <PmsReport />;
 
-       case 'Purchase Received':
-            return <PurReceived />
-
-            
-    
-      
-        case 'SecondLandingPG':
-            return<SecondLandingPG />
-
-
-        default:
-            return <SecondLandingPG />;
-    }
+    default:
+      return <SecondLandingPG />;
+  }
 };
 
-
-
 // Sidebar and Search Styling to be done
-const MainContent = (props) => {
+const MainContent = props => {
+  const { formSelected } = useSelector(state => state.user);
 
-    const { formSelected } = useSelector(state => state.user);
+  console.log(formSelected);
 
+  console.log('Main content : ', props);
 
+  return (
+    <div style={{ padding: '10px' }}>
+      <Grid container>
+        <Grid item xs={2}>
+          <Navigation module_name={props} />
+        </Grid>
+        <Grid item xs={10}>
+          {formSelector(formSelected)}
+        </Grid>
+      </Grid>
+    </div>
+  );
+};
 
-
-    console.log("Main content : ", props);
-
-    return (
-        <div style={{ padding: '10px' }}>
-            <Grid container>
-                <Grid item xs={2}>
-                    <Navigation module_name={props} />
-                </Grid>
-                <Grid item xs={10}>
-                    {
-                        formSelector(formSelected)
-                    }
-
-
-                </Grid>
-            </Grid>
-        </div>
-    )
-}
-
-export default MainContent
+export default MainContent;
